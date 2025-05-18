@@ -6,7 +6,8 @@
 <body>
     <h3>Data Pegawai</h3>
 
-    <a href ="/pegawai/tambah"> +tambah pegawai baru</a>
+ <a href="{{ route('pegawai.create') }}">+ Tambah Pegawai Baru</a>
+
 <br/>
 <br/>
 
@@ -25,8 +26,13 @@
 <td>{{ $p->pegawai_umur}}</td>
 <td>{{ $p->pegawai_alamat}}</td>
 <td>
-<a href="/pegawai/edit/{{ $p->pegawai_id }}">Edit</a>
-<a href="/pegawai/hapus/{{ $p->pegawai_id }}">Hapus/a>
+<a href="{{ route('pegawai.edit', $p->pegawai_id) }}"><button type>Edit</button></a>
+<form action="{{ route('pegawai.destroy', $p->pegawai_id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+    @csrf
+    @method('DELETE')
+    <button type="submit">Hapus</button>
+</form>
+
 </td>
 </tr>
 @endforeach

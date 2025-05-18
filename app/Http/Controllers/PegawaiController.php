@@ -10,47 +10,52 @@ class PegawaiController extends Controller
     public function index()
     {
         $pegawai = DB::table('pegawai')->get();
-        return view('index', ['pegawai'=> $pegawai]);
+        return view('show', ['pegawai'=> $pegawai]);
     }
 
-    public function tambah()
+    public function create()
     {
-        return view ('tambah');
+        return view ('create');
     }
 
     public function store(Request $request)
     {
-    // insert data ke table pegawai
-    DB::table('pegawai')->insert([
-        'pegawai_nama'   => $request->nama,
-        'pegawai_jabatan'=> $request->jabatan,
-        'pegawai_umur'   => $request->umur,
-        'pegawai_alamat' => $request->alamat
+   DB::table('pegawai')->insert([
+        'pegawai_nama' => $request->nama,
+        'pegawai_jabatan' => $request->jabatan,
+        'pegawai_umur' => $request->umur,
+        'pegawai_alamat' => $request->alamat,
     ]);
-
-    // alihkan halaman ke halaman pegawai
-    return redirect('/pegawai');
-    }
+    return redirect('/pegawai')->with('success', 'Data pegawai berhasil disimpan.');
+}
 
     public function edit($id)
     {
-      $pegawai = DB::table('pegawai')->where('pegawai_id', $id)->get();
+      $pegawai = DB::table('pegawai')->where('pegawai_id', $id)->first();
         return view('edit', ['pegawai'=> $pegawai]);
     }
 
     // update data pegawai
-public function update(Request $request)
+public function update(Request $request, $id)
 {
     // update data pegawai
-    DB::table('pegawai')->where('pegawai_id', $request->id)->update([
-        'pegawai_nama'   => $request->nama,
-        'pegawai_jabatan'=> $request->jabatan,
-        'pegawai_umur'   => $request->umur,
+    DB::table('pegawai')->where('pegawai_id', $id)->update([
+        'pegawai_nama' => $request->nama,
+        'pegawai_jabatan' => $request->jabatan,
+        'pegawai_umur' => $request->umur,
         'pegawai_alamat' => $request->alamat
     ]);
 
-    // alihkan halaman ke halaman pegawai
-    return redirect('/pegawai');
+    return redirect()->route('pegawai.index')->with('success', 'Data berhasil diperbarui.');
 }
+
+public function destroy($id)
+{
+    
+    DB::table('pegawai')->where('pegawai_id', $id)->delete();
+    return redirect('/pegawai')->with('success', 'Data pegawai berhasil dihapus.');
+    
+}
+
 
 }
